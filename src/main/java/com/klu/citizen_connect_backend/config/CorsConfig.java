@@ -1,9 +1,6 @@
-package com.klu.citizen_connect_backend.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 public class CorsConfig {
@@ -14,9 +11,14 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:5173", "http://localhost:3000")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                        .allowedHeaders("*");
+                        .allowedOrigins(
+                            "http://localhost:3000",
+                            "http://localhost:5173",
+                            "https://citizenconnect0.netlify.app" // 👈 IMPORTANT
+                        )
+                        .allowedMethods("*")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }

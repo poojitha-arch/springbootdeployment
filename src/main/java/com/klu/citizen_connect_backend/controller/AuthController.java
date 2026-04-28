@@ -14,11 +14,6 @@ import com.klu.citizen_connect_backend.service.OtpService;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = {
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "https://citizenconnect0.netlify.app"
-})
 public class AuthController {
 
     @Autowired
@@ -39,26 +34,13 @@ public class AuthController {
 
     @PostMapping("/send-otp")
     public ResponseEntity<String> sendOtp(@RequestBody OtpRequest request) {
-        String message = otpService.sendOtp(request);
-        return ResponseEntity.ok(message);
+        return ResponseEntity.ok(otpService.sendOtp(request));
     }
 
     @PostMapping("/verify-otp-register")
     public ResponseEntity<AuthResponse> verifyOtpAndRegister(@RequestBody VerifyOtpRequest request) {
-        AuthResponse response = otpService.verifyOtpAndRegister(
-                request.getUsername(),
-                request.getEmail(),
-                request.getPhone(),
-                request.getAddress(),
-                request.getCity(),
-                request.getState(),
-                request.getRole(),
-                request.getPassword(),
-                request.getConfirmPassword(),
-                request.getOtp()
+        return ResponseEntity.ok(
+                otpService.verifyOtpAndRegister(request.getEmail(), request.getOtp())
         );
-
-        return ResponseEntity.ok(response);
     }
 }
-

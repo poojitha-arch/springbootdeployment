@@ -1,6 +1,5 @@
 package com.klu.citizen_connect_backend.service;
 
-
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,10 +32,12 @@ public class OtpService {
         return String.valueOf(otp);
     }
 
-
-emailService.sendOtpEmail(request.getEmail(), request.getUsername(), otp);
-
     public String sendOtp(OtpRequest request) {
+
+        if (request.getEmail() == null || request.getEmail().isBlank()) {
+            throw new BadRequestException("Email is required");
+        }
+
         if (request.getPassword() == null || request.getConfirmPassword() == null) {
             throw new BadRequestException("Password fields are required");
         }
@@ -55,12 +56,22 @@ emailService.sendOtpEmail(request.getEmail(), request.getUsername(), otp);
         PendingUserData pendingUserData = new PendingUserData(request, otp, expiryTime);
         otpStorage.put(request.getEmail(), pendingUserData);
 
+        // OTP Railway logs lo kanipistundi
+        System.out.println("======================================");
+        System.out.println("OTP GENERATED");
+        System.out.println("Email: " + request.getEmail());
+        System.out.println("Username: " + request.getUsername());
+        System.out.println("OTP: " + otp);
+        System.out.println("======================================");
+
+        // EmailService logs-only version unte mail send cheyyadu, only true return chestundi
         emailService.sendOtpEmail(request.getEmail(), request.getUsername(), otp);
 
-        return "OTP sent successfully to email";
+        return "OTP sent successfully";
     }
 
     public AuthResponse verifyOtpAndRegister(String email, String otp) {
+
         PendingUserData pendingData = otpStorage.get(email);
 
         if (pendingData == null) {

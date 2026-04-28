@@ -33,12 +33,6 @@ public class OtpService {
         return String.valueOf(otp);
     }
 
-    System.out.println("======================================");
-System.out.println("OTP GENERATED");
-System.out.println("Email: " + request.getEmail());
-System.out.println("Username: " + request.getUsername());
-System.out.println("OTP: " + otp);
-System.out.println("======================================");
 
 emailService.sendOtpEmail(request.getEmail(), request.getUsername(), otp);
 
